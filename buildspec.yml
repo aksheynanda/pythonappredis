@@ -7,19 +7,15 @@ env:
 phases:
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
-      - echo "Repository URI: $REPOSITORY_URI"
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REPOSITORY
   build:
     commands:
-      - echo "Building Docker image..."
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+      - pwd
+      - ls -lstr
+      - docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
   post_build:
     commands:
-      - echo "Pushing Docker image to ECR..."
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Writing image definitions file..."
-      - printf '[{"name":"%s","imageUri":"%s"}]' "$ECS_CONTAINER_NAME" "$REPOSITORY_URI:$IMAGE_TAG" > imagedefinitions.json
+      - docker push $ECR_REPOSITORY:latest
 
 artifacts:
   files:
