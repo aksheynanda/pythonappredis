@@ -12,7 +12,7 @@ phases:
     commands:
       - pwd
       - ls -lstr
-      - docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+      - docker build -t $ECR_REPOSITORY:latestredis .
   post_build:
     commands:
       - docker push $ECR_REPOSITORY:latestredis
